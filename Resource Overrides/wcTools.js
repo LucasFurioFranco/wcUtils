@@ -24,7 +24,7 @@ window.wcTools = {
 
     find_first_ancestor: function(elem, css_selector) {
         try {
-            while (!elem.querySelector(css_selector))
+            while (!elem.matches(css_selector))
                 elem = elem.parentElement;
             return elem;
 
@@ -213,53 +213,52 @@ window.wcTools = {
 
         return ret;
 
-    }
+    },
 
-}
+    tesouro_direto: {
+        total_cart: function() {
+            try {
+                //Para o tesouro direto
+                var value = Array.from(document.querySelectorAll(".td-carrinho-resumo-info--valor")).reduce((sum, x) => {
+                    return sum + x.innerText
+                        .replaceAll(".", "")
+                        .replace(/R\$ ?/g, "")
+                        .replace(",", ".") * 1
+                }, 0);
+                console.log("Cart total value:", value);
 
-
-window.wcTools = window.wcTools || {};
-window.wcTools.tesouro_direto = {
-    total_cart: function() {
-        try {
-            //Para o tesouro direto
-            var value = Array.from(document.querySelectorAll(".td-carrinho-resumo-info--valor")).reduce((sum, x) => {
-                return sum + x.innerText
-                    .replaceAll(".", "")
-                    .replace(/R\$ ?/g, "")
-                    .replace(",", ".") * 1
-            }, 0);
-            console.log("Cart total value:", value);
-
-        } catch (ex) {
-            console.log("Unable to calculate")
-
-        }
-        return Math.round(value * 100) / 100;
-    }
-}
-
-
-
-//Carrinho Tesouro Direto
-if (location.href.indexOf("https://portalinvestidor.tesourodireto.com.br/Carrinho") >= 0) {
-
-
-    let cb = function(evt) {
-        try {
-
-            if (!!document.querySelector("#carrinhoQuantidade")) {
-                setTimeout(function() {
-                    document.querySelector("#carrinhoQuantidade")
-                        .setAttribute("data-valor-carrinho", wcTools.tesouro_direto.total_cart());
-                }, 100)
+            } catch (ex) {
+                console.log("Unable to calculate")
 
             }
+            return Math.round(value * 100) / 100;
+        },
 
-        } catch (ex) {}
+        auto_fix_total_cart: function() {
+            //Carrinho Tesouro Direto
+            if (location.href.indexOf("https://portalinvestidor.tesourodireto.com.br/Carrinho") >= 0) {
+
+
+                let cb = function(evt) {
+                    try {
+
+                        if (!!document.querySelector("#carrinhoQuantidade")) {
+                            setTimeout(function() {
+                                document.querySelector("#carrinhoQuantidade")
+                                    .setAttribute("data-valor-carrinho", wcTools.tesouro_direto.total_cart());
+                            }, 100)
+
+                        }
+
+                    } catch (ex) {}
+                }
+
+                setTimeout(cb, 1000);
+                window.addEventListener("click", cb);
+
+            }
+        }
     }
 
-    setTimeout(cb, 1000);
-    window.addEventListener("click", cb);
 
 }
