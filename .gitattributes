@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+For code injection using the extension [Resource Overrides](https://chrome.google.com/webstore/detail/resource-override/pkoacgokdfckfpndoffpifphamojphii) for Google Chrome.
+
+I use it with Resource Overrides, but it will work with any code injection extension.
+**Note:** take care on what extension you use, remember that **they have access to everything YOU access**.
