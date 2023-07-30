@@ -51,9 +51,21 @@
                 }
                 ret.parsed = JSON.parse(ret.result);
 
-                ret.exceptions.length && console.log("⚠️ " + global_name + ":", " Take care,", ret.exceptions.length, "exceptions happened here");
+                if (ret.exceptions.length) {
+
+                    console.group(`⚠️ ${global_name}: ${arguments.callee.name}${(arguments.callee+"").match(/.*?(\(.*?\))/)[1]}`);
+                    console.info(arguments);
+                    console.info(`Take care, ${ret.exceptions.length} exceptions happened here`);
+                    console.info(`This mean that they won't be present on the stringified JSON due to circular referencing`);
+                    console.info("Exceptions", ret.exceptions);
+                    console.groupEnd();
+                }
 
                 return ret;
+            },
+
+            copy_stringify_n2: function(x) { //n2 for (null, 2)
+                return !copy(methods.stringify(x, null, 2).result);
             },
 
             copy: function(method) {
@@ -352,6 +364,15 @@
     }
 
 
+
     window[global_name] = new WC_Tools();
+
+    // Favorite/quick list addition
+    window[global_name]._1 = window[global_name].copy_stringify_n2;
+
+
+
+    // Auto Inits down below here
+    window[global_name].tesouro_direto.auto_fix_total_cart();
 
 })("wcTools")
