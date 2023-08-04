@@ -1,6 +1,51 @@
 (function(global_name) {
     function WC_Tools() {
+
         var methods = {
+
+            trier: function(cb, err) {
+                try {
+                    return cb();
+                } catch (ex) {
+                    return err;
+                }
+            },
+
+            cookies_all: function(funcs) {
+                /*funcs is expected to receive an array of functions, each position will generate a new column to the table */
+                funcs = (typeof funcs == "function") ? [funcs] : (funcs || []);
+                var trier = methods.trier;
+                var dict = {};
+                var cookies = document.cookie
+                    .split("; ")
+                    .filter(c => c.indexOf("_opt_out") == -1)
+                    .map(c => {
+                        var t = c.split("="),
+                            k = t[0], //k for "Key"
+                            v = decodeURIComponent(t.splice(1).join("=")), //v for "Value"
+                            results = [k, v]
+
+                        if (funcs.forEach) {
+                            funcs.forEach && funcs.forEach(f => {
+                                results.push(trier(function() {
+                                    return f(v)
+                                }, null))
+                            });
+
+                        } else {
+                            results.push("ERR - funcs not functions");
+
+                        }
+
+
+                        dict[k] = v;
+
+                        return results;
+                    })
+
+                console.table(cookies);
+                return dict;
+            },
 
             find_new_globals: function() {
                 var iframe = document.createElement('iframe');
@@ -77,7 +122,9 @@
                 iframe.setAttribute("hidden", true);
                 document.body.appendChild(iframe)
 
-                window.console = iframe.contentWindow.console;
+                var binded = iframe.contentWindow.console.log.bind(top);
+                window.console = binded.bind(top);
+                return window.console.bind(top);
 
                 //Preciso colocar um bind da vida aqui, até lá, segue sem excluir o dito cujo
                 //iframe.parentElement.removeChild(iframe);
