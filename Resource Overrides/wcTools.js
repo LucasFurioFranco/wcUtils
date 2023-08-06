@@ -11,6 +11,8 @@
                 }
             },
 
+            //Source/credits: Simo ♥ Ahava
+            //https://www.simoahava.com/analytics/two-simple-data-model-tricks/?utm_source=github&utm_medium=banheiro&utm_campaign=brazil%E2%99%A5simo&utm_content=https://github.com/LucasFurioFranco/wcUtils/blob/main/Resource%20Overrides/wcTools.js
             get_all_dl_data: function(gtm_id) {
                 gtm_id = gtm_id || Object.keys(google_tag_manager).find(id => ("" + id).indexOf("GTM-") === 0);
 
