@@ -276,7 +276,7 @@
                 return data;
             },
 
-            blockUnload: function() {
+            block_unload: function() {
                 window.onbeforeunload = function(e) {
                     return 'Dialog text here.';
                 };
@@ -432,6 +432,7 @@
     window[global_name] = new WC_Tools();
 
     // Favorite/quick list addition
+    window[global_name]._0 = window[global_name].block_unload;
     window[global_name]._1 = window[global_name].copy_stringify_n2;
 
 
