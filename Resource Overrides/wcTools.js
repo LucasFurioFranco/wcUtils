@@ -11,6 +11,21 @@
                 }
             },
 
+            get_all_dl_data: function(gtm_id) {
+                gtm_id = gtm_id || Object.keys(google_tag_manager).find(id => ("" + id).indexOf("GTM-") === 0);
+
+                //the attribute is called "dataLayer" even if the DL is given a different name, so don't worry!
+                var dataModel = window.google_tag_manager[gtm_id].dataLayer.get({
+                    split: function() {
+                        return [];
+                    }
+                });
+
+                console.table(dataModel);
+                return dataModel;
+            },
+
+
             cookies_all: function(funcs) {
                 /*funcs is expected to receive an array of functions, each position will generate a new column to the table */
                 funcs = (typeof funcs == "function") ? [funcs] : (funcs || []);
