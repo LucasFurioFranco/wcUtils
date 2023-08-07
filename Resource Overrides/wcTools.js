@@ -438,6 +438,6 @@
 
 
     // Auto Inits down below here
-    window[global_name].tesouro_direto.auto_fix_total_cart();
+    //window[global_name].tesouro_direto.auto_fix_total_cart();
 
 })("wcTools")
