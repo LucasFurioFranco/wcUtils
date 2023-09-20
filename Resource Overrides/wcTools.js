@@ -28,6 +28,37 @@
             },
 
 
+            /**
+             * @params
+             * callback_ignore [Function]: expects a function that receives an URL object type and returns true for ingoring it and false equivalent otherwise
+             */
+            list_external_scripts: function(callback_ignore) {
+                callback_ignore = typeof callback_ignore == "function" ? callback_ignore : function() {
+                    return false
+                };
+
+                var data = Array.from(document.querySelectorAll("script"))
+                    .map(s => {
+                        try {
+                            return new URL(s.src)
+                        } catch (ex) {
+                            return null
+                        }
+                        s.src
+                    })
+                    .filter(s => s)
+                    .filter(s => !callback_ignore(s))
+                    .reduce((dict, s) => {
+                        var src_url = new URL(s);
+                        dict[src_url.hostname] = dict[src_url.hostname] || [];
+                        dict[src_url.hostname].push(src_url);
+                        return dict;
+                    }, {})
+
+                return data;
+            },
+
+
             cookies_all: function(funcs) {
                 /*funcs is expected to receive an array of functions, each position will generate a new column to the table */
                 funcs = (typeof funcs == "function") ? [funcs] : (funcs || []);
