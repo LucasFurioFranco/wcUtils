@@ -3,12 +3,38 @@
 
         var methods = {
 
+            dl_filter_by_event_name: function(event_name, dl_name) {
+                dl_name = dl_name || "dataLayer";
+
+                return window[dl_name].filter(o => (o && o.event == event_name));
+
+            },
+
+            _resource_off_all: function() {
+                if (location.href.indexOf("chrome-extension://pkoacgokdfckfpndoffpifphamojphii") >= 0) {
+                    document.querySelectorAll(".onoffswitch-checkbox").forEach(x => {
+                        if (x.checked) x.click()
+                    })
+                }
+            },
+
+            decode_using_html: function(text) {
+                var p = document.createElement("p");
+                p.innerHTML = text;
+                return p.innerHTML;
+            },
+
             trier: function(cb, err) {
                 try {
                     return cb();
                 } catch (ex) {
                     return err;
                 }
+            },
+
+            date_days_from_now: function(date) {
+                date = (typeof date == "string") ? new Date(date) : date;
+                return Math.abs((date - new Date()) / (1000 * 60 * 60 * 24)) //Dias
             },
 
             //Source/credits: Simo ♥ Ahava
@@ -32,7 +58,7 @@
              * @params
              * callback_ignore [Function]: expects a function that receives an URL object type and returns true for ingoring it and false equivalent otherwise
              */
-            list_external_scripts: function(callback_ignore) {
+            list_scripts: function(callback_ignore) {
                 callback_ignore = typeof callback_ignore == "function" ? callback_ignore : function() {
                     return false
                 };
@@ -58,6 +84,43 @@
                 return data;
             },
 
+            list_scripts_table: function(callback_ignore) {
+                var data = window[global_name].list_scripts(callback_ignore);
+                var table = Object.keys(data).reduce((list, host) => {
+                    data[host].forEach(url => list.push({
+                        host: host,
+                        href: url.href
+                    }));
+                    return list;
+                }, []);
+                console.table(table);
+                return Object.values(table).reduce((list, row) => {
+                    list.push([row.host, row.href].join("\t"))
+                    return list;
+                }, [
+                    ["host", "href"].join("\t")
+                ]).join("\n");
+            },
+
+            list_scripts_table_copy: function(callback_ignore) {
+                var data = window[global_name].list_scripts(callback_ignore);
+                var table = Object.keys(data).reduce((list, host) => {
+                    data[host].forEach(url => list.push({
+                        host: host,
+                        href: url.href
+                    }));
+                    return list;
+                }, []);
+                console.table(table);
+                var to_copy = Object.values(table).reduce((list, row) => {
+                    list.push([row.host, row.href].join("\t"))
+                    return list;
+                }, [
+                    ["host", "href"].join("\t")
+                ]).join("\n");
+                (typeof window.copy == "function") && window.copy(to_copy);
+                return to_copy;
+            },
 
             cookies_all: function(funcs) {
                 /*funcs is expected to receive an array of functions, each position will generate a new column to the table */
