@@ -3,6 +3,19 @@
 
         var methods = {
 
+            dl_events_separated: function(dl_name) {
+                dl_name = dl_name || "dataLayer";
+                var dataLayer = window[dl_name];
+
+                return dataLayer.reduce((d, e) => {
+                    var name = ((e && e.event) || "#message#");
+                    d[name] = d[name] || [];
+                    d[name].push(e);
+                    return d;
+                }, {});
+
+            },
+
             dl_filter_by_event_name: function(event_name, dl_name) {
                 dl_name = dl_name || "dataLayer";
 
@@ -342,7 +355,11 @@
                                     } else {
                                         //Defaut property
                                         let splitted = tuple.match(/^(..)(.+)$/);
-                                        dict[splitted[1]] = decodeURIComponent(splitted[2]);
+                                        if (splitted) {
+                                            dict[splitted[1]] = decodeURIComponent(splitted[2]);
+                                        } else {
+                                            dict[tuple] = "*?wc*" + tuple + "*wc*?"; //Don't what what the caralhos is the product attribute "af" sent.. might mean "A Fucker" 😒
+                                        }
 
                                     }
                                     return dict;
