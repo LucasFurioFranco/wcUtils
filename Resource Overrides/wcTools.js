@@ -349,7 +349,11 @@
                                             last_key = "[c]" + tuple.match(/^k\d+(.+)$/)[1];
                                         } else {
                                             //Custom property value
-                                            dict[last_key] = tuple.match(/^v\d+(.+)$/)[1];
+                                            try {
+                                                dict[last_key] = tuple.match(/^v\d+(.+)$/)[1];
+                                            } catch(ex) {
+                                                dict[last_key] = "*wc*"+tuple+"*wc*";
+                                            }
                                         }
 
                                     } else {
