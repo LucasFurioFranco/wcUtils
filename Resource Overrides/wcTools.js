@@ -334,8 +334,9 @@
                 if (clr) console && console.clear && console.clear();
                 var data = str.split("&").map(x => decodeURIComponent(x));
 
+                var last_key_idx;
                 var last_key; //For custom properties
-
+                
                 try {
                     var prod_data = data.filter(k => k.match(/^pr\d.*/))
                         .map(k => {
@@ -346,11 +347,15 @@
                                     if (tuple.match(/^[kv]\d/)) {
                                         if (tuple[0] == "k") {
                                             //Custom property key
-                                            last_key = "[c]" + tuple.match(/^k\d+(.+)$/)[1];
+                                            var groups = tuple.match(/^k(\d+)(.+)$/);
+                                            last_key_idx = groups[1];
+                                            last_key = "[c]" + groups[2];
                                         } else {
                                             //Custom property value
                                             try {
-                                                dict[last_key] = tuple.match(/^v\d+(.+)$/)[1];
+                                                dict[last_key] = tuple.match(new RegExp("^v"+last_key_idx+"(.*?)$"))[1];
+
+                                                //dict[last_key] = tuple.match(/^v\d+(.+)$/)[1];
                                             } catch(ex) {
                                                 dict[last_key] = "*wc*"+tuple+"*wc*";
                                             }
