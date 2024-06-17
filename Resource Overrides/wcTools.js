@@ -3,6 +3,16 @@
 
         var methods = {
 
+            dev_tools: {
+                network: {
+                    filters: {
+                        "ga":     "/(collect.*tid=G-)/",
+                        "gtm":    "/(id=gtm-)/",
+                        "ga&gtm": "/(collect.*tid=G-)|(id=gtm-)/"
+                    }
+                }
+            },
+
             dl_events_separated: function(dl_name) {
                 dl_name = dl_name || "dataLayer";
                 var dataLayer = window[dl_name];
