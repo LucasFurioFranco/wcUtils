@@ -11,8 +11,8 @@
 
             logger("### I Hear You");
 
-            if (evt.ctrlKey && evt.key == "Enter") {
-                logger("### ### CTRL+Enter");
+            if (evt.ctrlKey && evt.shiftKey && evt.key == "Enter") {
+                logger("### ### CTRL+SHIFT+Enter");
 
                 //document.body.focus(); //Don't ask :'(
                 var sv_btn = Array.from(document.querySelectorAll('[data-gtm-submit-button]')).pop();
