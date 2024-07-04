@@ -24,6 +24,12 @@
                 var name_in = Array.from(document.querySelectorAll('[data-name-value]')).pop(); //Retrieves the çast "save" button
                 name_in && name_in.focus();
 
+            } else if (evt.key == 'F4') {
+                logger("### ### F4");
+
+                var name_in = document.querySelector('.suite-assistant-search-input'); //Retrieves the general search input
+                name_in && name_in.focus();
+
             }
 
         }, true);
