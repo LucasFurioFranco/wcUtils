@@ -1,3 +1,10 @@
+/*
+   Created by Lucas Fúrio Franco (a.k.a. Banheiro/Toilet/Bathroom/WC)
+
+   NOTE: `Better adding it to head, but no problem on adding it to body.
+   Existance is buggy, so watch out for bugs (there is way more bugs on earth than humans, and so does it on this code)
+*/
+
 (function(global_name) {
     function WC_Tools() {
 
